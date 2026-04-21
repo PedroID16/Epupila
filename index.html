@@ -163,8 +163,7 @@
     </div>
 
  <div class="contact-form">
-  <form action="https://formspree.io/f/mpqkyqpb" method="POST">
-    
+  <form id="my-contact-form">
     <div class="form-group">
       <label>Seu nome</label>
       <input type="text" name="name" placeholder="e.g. Maria Eduarda" required>
@@ -177,7 +176,7 @@
 
     <div class="form-group">
       <label>Telefone</label>
-      <input type="text" name="phone" placeholder="******-*******">
+      <input type="tel" name="phone" placeholder="******-*******">
     </div>
 
     <div class="form-group">
@@ -186,11 +185,11 @@
       <textarea name="message" placeholder="Como posso ajudar?" required></textarea>
     </div>
 
-    <button type="submit" class="form-submit" onclick="this.textContent='Enviado ✓'; this.style.background='#6efdb4'; this.style.color='#2a1a4a';">
-      Enviar
-    </button>
-
-  </form> </div>
+    <button type="submit" id="submit-button" class="form-submit">Enviar</button>
+    
+    <p id="form-status" style="margin-top: 10px; font-weight: bold;"></p>
+  </form>
+</div>
     </div>
   </div>
 </section>
@@ -204,4 +203,37 @@
 </footer>
 
 </body>
+<script src="https://unpkg.com/@formspree/ajax@1" defer></script>
+
+<script>
+  window.formspree = window.formspree || function () { (formspree.q = formspree.q || []).push(arguments); };
+  
+  formspree('initForm', { 
+    formElement: '#my-contact-form', 
+    formId: 'mpqkyqpb',
+    onSuccess: function(form, response) {
+      // This code runs INSTEAD of the redirect
+      const btn = document.getElementById('submit-button');
+      const status = document.getElementById('form-status');
+      
+      // Apply your green styles
+      btn.textContent = 'Enviado ✓';
+      btn.style.background = '#e1a5b3';
+      btn.style.color = '#2a1a4a';
+      
+      status.style.color = '#e1a5b3';
+      status.textContent = 'Obrigado! Sua mensagem foi enviada.';
+      
+      form.reset(); // Optional: clears the form fields
+    },
+    onError: function(form, response) {
+      const status = document.getElementById('form-status');
+      status.style.color = '#ff6b6b';
+      status.textContent = 'Ops! Houve um problema ao enviar.';
+    }
+  });
+</script>
+
+
+
 </html>
